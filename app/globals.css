@@ -1,0 +1,218 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Main palette */
+  --background: 0 0% 98%; /* #FAFAFA - Main background */
+  --foreground: 0 0% 7%; /* #111111 - Primary text */
+  --card: 0 0% 96%; /* #F5F5F5 - Card backgrounds */
+  --card-foreground: 0 0% 7%; /* #111111 - Card text */
+  --popover: 0 0% 98%; /* #FAFAFA - Popover background */
+  --popover-foreground: 0 0% 7%; /* #111111 - Popover text */
+
+  /* Interactive elements */
+  --primary: 0 0% 7%; /* #111111 - Primary buttons/CTAs */
+  --primary-foreground: 0 0% 98%; /* #FAFAFA - Primary button text */
+  --secondary: 0 0% 96%; /* #F5F5F5 - Secondary buttons */
+  --secondary-foreground: 0 0% 7%; /* #111111 - Secondary button text */
+
+  /* Neutral elements */
+  --muted: 0 0% 96%; /* #F5F5F5 - Muted backgrounds */
+  --muted-foreground: 0 0% 32%; /* #525252 - Muted text */
+  --accent: 0 0% 96%; /* #F5F5F5 - Accent color */
+  --accent-foreground: 0 0% 7%; /* #111111 - Accent text */
+
+  /* Borders and inputs */
+  --border: 0 0% 90%; /* #E5E5E5 - Main borders */
+  --input: 0 0% 90%; /* #E5E5E5 - Input borders */
+  --ring: 0 0% 7%; /* #111111 - Focus rings */
+
+  /* Destructive actions */
+  --destructive: 0 84.2% 60.2%; /* Red for errors/delete */
+  --destructive-foreground: 0 0% 98%; /* White text on red */
+
+  /* Border radius */
+  --radius: 0.5rem; /* 8px - Main border radius */
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Refined Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes drawLine {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Utility classes */
+.fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.scale-in {
+  animation: scaleIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.draw-line {
+  animation: drawLine 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Clean hover effects */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Background patterns */
+.subtle-grid {
+  background-image: linear-gradient(rgba(17, 17, 17, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 17, 17, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+}
+
+/* Scroll reveal */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Clean card styles */
+.clean-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(229, 229, 229, 0.5);
+  transition: all 0.3s ease;
+}
+
+.clean-card:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(17, 17, 17, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e5e5e5;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4d4d4;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
