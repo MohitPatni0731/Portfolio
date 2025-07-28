@@ -34,10 +34,13 @@ export function ChatArea({ currentChatId, chats, setChats }: ChatAreaProps) {
 
   const generateAIResponse = async (userInput: string): Promise<string> => {
     try {
+      const apiKey = process.env.NEXT_PUBLIC_GROQ_API_KEY || 'your-api-key-here'
+      console.log('API Key available:', apiKey ? 'Yes' : 'No')
+      
       const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_GROQ_API_KEY || 'your-api-key-here'}`,
+          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -144,7 +147,19 @@ RESPONSE GUIDELINES:
         })
       })
 
+      if (!response.ok) {
+        const errorData = await response.text()
+        console.error('API Error:', response.status, errorData)
+        throw new Error(`API Error: ${response.status} - ${errorData}`)
+      }
+
       const data = await response.json()
+      console.log('API Response:', data)
+      
+      if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+        throw new Error('Invalid response format from API')
+      }
+      
       return data.choices[0].message.content
     } catch (error) {
       console.error('Error calling Groq API:', error)
