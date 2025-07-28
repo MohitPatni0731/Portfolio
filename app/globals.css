@@ -2,6 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide dev tools and console elements */
+[data-testid="dev-tools"],
+[data-testid="console"],
+[class*="dev-tools"],
+[class*="console"],
+[class*="debug"],
+[id*="dev-tools"],
+[id*="console"],
+[id*="debug"] {
+  display: none !important;
+}
+
+/* Hide any elements that might be dev tools */
+div[style*="position: fixed"][style*="bottom: 0"][style*="left: 0"] {
+  display: none !important;
+}
+
+/* Hide React DevTools if present */
+#react-devtools-root,
+[data-reactroot] > div:last-child:not(:first-child) {
+  display: none !important;
+}
+
+/* Ensure no dev tools appear */
+iframe[src*="devtools"],
+iframe[src*="debugger"] {
+  display: none !important;
+}
+
+/* Hide any browser dev tools or extensions */
+div[class*="devtools"],
+div[class*="console"],
+div[class*="debugger"],
+div[id*="devtools"],
+div[id*="console"],
+div[id*="debugger"] {
+  display: none !important;
+}
+
+/* Hide any fixed positioned elements that might be dev tools */
+div[style*="position: fixed"][style*="z-index: 9999"],
+div[style*="position: fixed"][style*="z-index: 2147483647"] {
+  display: none !important;
+}
+
+/* Hide any elements with dev-related classes */
+.dev-tools,
+.console,
+.debugger,
+.devtools {
+  display: none !important;
+}
+
+/* Ensure the main content is always visible */
+main {
+  z-index: 1 !important;
+}
+
+/* Hide any overlay elements that might be dev tools */
+div[role="dialog"][aria-label*="dev"],
+div[role="dialog"][aria-label*="console"],
+div[role="dialog"][aria-label*="debug"] {
+  display: none !important;
+}
+
 :root {
   /* Main palette */
   --background: 0 0% 98%; /* #FAFAFA - Main background */
