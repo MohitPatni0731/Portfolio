@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NEXT_PUBLIC_GROQ_API_KEY = "your-api-key-here"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200 
