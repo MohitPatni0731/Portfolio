@@ -17,7 +17,7 @@ interface SidebarProps {
 
 export function Sidebar({ chats, currentChatId, onNewChat, onSelectChat }: SidebarProps) {
   return (
-    <div className="w-[260px] lg:w-[260px] bg-[#202123] h-full flex flex-col">
+    <div className="w-[260px] bg-[#202123] h-full flex flex-col">
       {/* New Chat Button */}
       <div className="p-3">
         <button
@@ -25,8 +25,7 @@ export function Sidebar({ chats, currentChatId, onNewChat, onSelectChat }: Sideb
           className="w-full flex items-center gap-3 px-3 py-2 text-sm text-white hover:bg-[#2A2A2A] rounded-md transition-colors border border-[#565869]"
         >
           <Plus size={16} />
-          <span className="hidden sm:inline">New chat</span>
-          <span className="sm:hidden">New</span>
+          New chat
         </button>
       </div>
 

@@ -223,10 +223,10 @@ RESPONSE GUIDELINES:
   // Show centered input if no messages yet
   if (!hasStartedChat && (!currentChatId || currentMessages.length === 0)) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#212121] px-4">
-        <div className="text-center w-full max-w-4xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 sm:mb-8">Hi, I am Mohit</h1>
-          <div className="w-full max-w-3xl mx-auto">
+      <div className="flex-1 flex items-center justify-center bg-[#212121]">
+        <div className="text-center max-w-4xl mx-auto px-4">
+          <h1 className="text-5xl font-bold text-white mb-8">Hi, I am Mohit</h1>
+          <div className="max-w-3xl mx-auto">
             <div className="relative">
               <input
                 type="text"
@@ -234,7 +234,7 @@ RESPONSE GUIDELINES:
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-[#40414f] text-white placeholder-[#8e8ea0] rounded-lg text-base sm:text-lg focus:outline-none focus:ring-1 focus:ring-[#8e8ea0] border border-[#565869]"
+                className="w-full px-6 py-4 bg-[#40414f] text-white placeholder-[#8e8ea0] rounded-lg text-lg focus:outline-none focus:ring-1 focus:ring-[#8e8ea0] border border-[#565869]"
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                 <button 
@@ -246,7 +246,7 @@ RESPONSE GUIDELINES:
               </div>
             </div>
           </div>
-          <p className="text-xs text-[#8e8ea0] mt-6 sm:mt-8 px-4">
+          <p className="text-xs text-[#8e8ea0] mt-8">
             ML enthusiast by day, AI builder by night. Let's chat about tech, research, or anything that sparks curiosity! 🚀
           </p>
         </div>
@@ -266,7 +266,7 @@ RESPONSE GUIDELINES:
 
       {/* Input Area */}
       <div className="border-t border-[#565869] bg-[#212121]">
-        <div className="max-w-4xl mx-auto p-3 sm:p-4">
+        <div className="max-w-4xl mx-auto p-4">
           <div className="relative">
             <input
               type="text"
@@ -274,7 +274,7 @@ RESPONSE GUIDELINES:
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-[#40414f] text-white placeholder-[#8e8ea0] rounded-lg text-base sm:text-lg focus:outline-none focus:ring-1 focus:ring-[#8e8ea0] border border-[#565869]"
+              className="w-full px-6 py-4 bg-[#40414f] text-white placeholder-[#8e8ea0] rounded-lg text-lg focus:outline-none focus:ring-1 focus:ring-[#8e8ea0] border border-[#565869]"
             />
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
               <button 
