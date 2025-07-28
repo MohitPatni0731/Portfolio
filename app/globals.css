@@ -67,6 +67,51 @@ div[role="dialog"][aria-label*="debug"] {
   display: none !important;
 }
 
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  /* Prevent zoom on input focus */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Smooth scrolling for mobile */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Better touch targets */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent text selection on buttons */
+  button {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
+/* Prevent zoom on input focus for all devices */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  font-size: 16px !important;
+}
+
 :root {
   /* Main palette */
   --background: 0 0% 98%; /* #FAFAFA - Main background */

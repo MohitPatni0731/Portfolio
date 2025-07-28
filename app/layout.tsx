@@ -27,7 +27,13 @@ export const metadata: Metadata = {
       "Machine Learning Research Scholar and Data Analyst specializing in advanced ML algorithms, data visualization, and network security research.",
     type: "website",
   },
-    generator: 'v0.dev'
+  generator: 'v0.dev',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 }
 
 export default function RootLayout({
@@ -37,7 +43,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
-      <body className="font-inter antialiased">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+      </head>
+      <body className="font-inter antialiased touch-manipulation">
         {children}
       </body>
     </html>
