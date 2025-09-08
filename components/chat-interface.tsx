@@ -7,6 +7,7 @@ import { ChatArea } from "./chat-area"
 export function ChatInterface() {
   const [chats, setChats] = useState<Array<{ id: string; title: string; timestamp: Date }>>([])
   const [currentChatId, setCurrentChatId] = useState<string | null>(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   // Auto-create a chat when component mounts
   useEffect(() => {
@@ -34,17 +35,20 @@ export function ChatInterface() {
   }
 
   return (
-    <div className="flex h-full w-full">
+    <div className="flex h-full w-full relative">
       <Sidebar 
         chats={chats}
         currentChatId={currentChatId}
         onNewChat={startNewChat}
         onSelectChat={setCurrentChatId}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
       <ChatArea 
         currentChatId={currentChatId}
         chats={chats}
         setChats={setChats}
+        onMenuClick={() => setIsSidebarOpen(true)}
       />
     </div>
   )

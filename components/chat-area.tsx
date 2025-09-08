@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Send } from "lucide-react"
+import { Send, Menu } from "lucide-react"
 import { Message } from "./message"
 
 interface Chat {
@@ -21,9 +21,10 @@ interface ChatAreaProps {
   currentChatId: string | null
   chats: Chat[]
   setChats: React.Dispatch<React.SetStateAction<Chat[]>>
+  onMenuClick: () => void
 }
 
-export function ChatArea({ currentChatId, chats, setChats }: ChatAreaProps) {
+export function ChatArea({ currentChatId, chats, setChats, onMenuClick }: ChatAreaProps) {
   const [messages, setMessages] = useState<Record<string, Message[]>>({})
   const [inputValue, setInputValue] = useState("")
   // Track if the user has started the chat (sent the first message)
@@ -34,21 +35,21 @@ export function ChatArea({ currentChatId, chats, setChats }: ChatAreaProps) {
 
   const generateAIResponse = async (userInput: string): Promise<string> => {
     try {
-      const apiKey = process.env.NEXT_PUBLIC_GROQ_API_KEY || 'your-api-key-here'
+      const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
+      if (!apiKey) {
+        throw new Error("NEXT_PUBLIC_GEMINI_API_KEY is not set.")
+      }
       console.log('API Key available:', apiKey ? 'Yes' : 'No')
-      
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+
+      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + apiKey, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'llama3-8b-8192',
-          messages: [
-            {
-              role: 'system',
-              content: `You are Mohit Patni, a Machine Learning Research Scholar and Data Analyst. You are enthusiastic, knowledgeable, and always ready to help people learn about your work and experience. Respond naturally as if you're having a conversation with someone who's interested in your portfolio.
+          contents: [{
+            parts: [{
+              text: `You are Mohit Patni, a Machine Learning Research Scholar and Data Analyst. You are enthusiastic, knowledgeable, and always ready to help people learn about your work and experience. Respond naturally as if you're having a conversation with someone who's interested in your portfolio.
 
 IMPORTANT: Only mention things that are actually in Mohit's resume. Do not claim expertise in areas he hasn't worked on (like computer vision, time series analysis, GANs, VAEs, etc.). Stick strictly to his actual experience and projects.
 
@@ -96,7 +97,7 @@ PAST EXPERIENCES:
    - Used Wireshark for file transfer tests and packet analysis, improving network security by 30%
 
 5. FULL STACK PRODUCT DEVELOPER INTERN at IIIT Hyderabad (October 2022 - March 2023):
-   - Worked with Prof. Karthik Vaidyanathan (https://karthikvaidhyanathan.com/)
+   - Worked with Prof. Karthik Vaidhyanathan (https://karthikvaidhyanathan.com/)
    - Collaborated on https://python-iiith.vlabs.ac.in/ - Python Virtual Lab project (joint initiative with Government of India)
    - Created web-based Python compiler with Pyodide, reducing loading size from 50Mb to 15Mb
    - Sped up page loading time by 2 seconds by removing unnecessary dependencies
@@ -141,32 +142,28 @@ RESPONSE GUIDELINES:
 - ONLY mention things you have actually done - do not claim expertise in areas you haven't worked on
 - Do not mention computer vision, time series analysis, GANs, VAEs, or other areas not in your resume
 - Keep answers brief and to the point - avoid long paragraphs
-- If asked about ML expertise, focus on: bird species prediction, fire prediction, data analysis, and LLM applications`
-            },
-            {
-              role: 'user',
-              content: userInput
-            }
-          ],
-          temperature: 0.7,
-          max_tokens: 1000
+- If asked about ML expertise, focus on: bird species prediction, fire prediction, data analysis, and LLM applications.
+
+The user input is: ${userInput}`
+            }]
+          }]
         })
-      })
+      });
 
       if (!response.ok) {
-        const errorData = await response.text()
-        console.error('API Error:', response.status, errorData)
-        throw new Error(`API Error: ${response.status} - ${errorData}`)
+        const errorBody = await response.text();
+        console.error("API Error Response:", errorBody);
+        throw new Error(`API request failed with status ${response.status}`);
       }
 
-      const data = await response.json()
-      console.log('API Response:', data)
+      const data = await response.json();
+      console.log('API Response:', data);
       
-      if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-        throw new Error('Invalid response format from API')
-      }
-      
-      return data.choices[0].message.content
+      // Extract the response from the new structure
+      const aiResponse = data.candidates[0]?.content.parts[0]?.text || "Sorry, I couldn't process that.";
+
+      return aiResponse;
+
     } catch (error) {
       console.error('Error calling Groq API:', error)
       return "I'm sorry, I'm having trouble connecting right now. I'm Mohit Patni, a Machine Learning Research Scholar and Data Analyst. How can I help you learn more about my work and skills?"
@@ -278,6 +275,18 @@ RESPONSE GUIDELINES:
   // After first message, show chat layout
   return (
     <div className="flex-1 flex flex-col bg-[#212121]">
+      {/* Header for mobile */}
+      <div className="md:hidden flex items-center justify-between p-3 border-b border-[#565869]">
+        <button onClick={onMenuClick} className="text-white">
+          <Menu size={24} />
+        </button>
+        <h2 className="text-lg font-semibold text-white truncate">
+          {currentChat?.title || "New Chat"}
+        </h2>
+        {/* Spacer */}
+        <div className="w-6" /> 
+      </div>
+      
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto">
         {currentMessages.map((message) => (
