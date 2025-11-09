@@ -2,10 +2,9 @@
   command = "npm run build"
   publish = ".next"
 
-[build.environment]
-  NEXT_PUBLIC_GEMINI_API_KEY = "your-api-key-here"
+# For Next.js API routes, Netlify automatically uses the Next.js runtime
+# No explicit plugin configuration needed for Next.js 15+
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200 
+# Environment variables should be set in Netlify Dashboard:
+# Required: GEMINI_API_KEY (server-side only, not exposed to client)
+# Go to: Netlify Dashboard -> Site Settings -> Environment Variables 

@@ -20,8 +20,6 @@ jobs:
         
       - name: Build
         run: npm run build
-        env:
-          NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.NEXT_PUBLIC_GEMINI_API_KEY }}
           
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0
