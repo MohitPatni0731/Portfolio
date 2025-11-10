@@ -1,9 +1,8 @@
 [build]
   command = "npm run build"
-  publish = ".next"
 
-# For Next.js API routes, Netlify automatically uses the Next.js runtime
-# No explicit plugin configuration needed for Next.js 15+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 # Environment variables should be set in Netlify Dashboard:
 # Required: GEMINI_API_KEY (server-side only, not exposed to client)
