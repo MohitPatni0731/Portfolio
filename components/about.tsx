@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { GraduationCap, MapPin, Calendar } from "lucide-react"
+import { gradientText, softGlowShadow } from "@/lib/utils"
 
 export function About() {
   const [isVisible, setIsVisible] = useState(false)
@@ -25,73 +26,89 @@ export function About() {
   }, [])
 
   return (
-    <section id="about" ref={sectionRef} className="py-24 bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      id="about"
+      ref={sectionRef}
+      className="relative overflow-hidden py-[var(--section-padding)]"
+    >
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-[-10%] top-5 h-80 w-80 rounded-full bg-primary/18 blur-3xl" />
+        <div className="absolute right-[-15%] top-1/3 h-96 w-96 rounded-full bg-secondary/18 blur-[140px]" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
         <div className={`scroll-reveal ${isVisible ? "revealed" : ""}`}>
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mb-6 font-manrope">About Me</h2>
-            <div className="w-16 h-0.5 bg-[#111111] mx-auto" />
+          <div className="mx-auto mb-14 max-w-3xl text-center">
+            <span className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.3em] text-white/60">
+              About
+            </span>
+            <h2 className={gradientText("mt-6 text-3xl font-semibold md:text-5xl")}>From Indore to California, building AI for humans</h2>
+            <p className="mt-4 text-base text-white/65 md:text-lg">
+              I design and deploy applied ML systems that connect storytelling, data, and delightful product moments.
+            </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6">
-              <p className="text-lg text-[#525252] leading-relaxed">
-                I'm a passionate Machine Learning Research Scholar and Data Analyst currently pursuing my Master's in
-                Computer Science at California State University Fullerton.
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+            <div className="space-y-6 text-base leading-relaxed text-white/70">
+              <p>
+                I'm a Machine Learning Research Scholar and data analyst based in Fullerton, California. My work bridges
+                behavioral AI, environmental anthropology, and product design—translating complex datasets into
+                intuitive, conversational experiences.
               </p>
-              <p className="text-lg text-[#525252] leading-relaxed">
-                My research focuses on applying advanced machine learning algorithms to real-world problems, from
-                identifying bird species through audio analysis to analyzing CEO characteristics and firm performance
-                patterns.
+              <p>
+                I thrive in interdisciplinary teams, whether collaborating with researchers on geospatial ML pipelines or
+                launching AI products that help people build personal knowledge ecosystems. Empathy, research rigor, and
+                rapid experimentation shape every project I touch.
               </p>
-              <p className="text-lg text-[#525252] leading-relaxed">
-                With experience spanning network security, full-stack development, and data visualization, I bring a
-                comprehensive approach to solving complex technical challenges.
+              <p>
+                When I'm not prototyping or analyzing data, you'll find me curating community workshops or scouting for
+                new ideas at the intersection of culture and technology.
               </p>
             </div>
 
             <div className="space-y-6">
-              <div className="clean-card p-8 hover-lift">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 border border-[#E5E5E5] flex items-center justify-center">
-                    <GraduationCap className="h-6 w-6 text-[#111111]" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-[#111111] mb-2 font-manrope">Current Education</h3>
-                    <p className="text-[#525252] font-medium">Master of Science in Computer Science</p>
-                    <p className="text-[#525252]">California State University Fullerton</p>
-                    <div className="flex items-center space-x-4 mt-2 text-sm text-[#525252]">
-                      <span className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        Aug 2024 - June 2026
-                      </span>
+              {[{
+                title: "Current Education",
+                subtitle: "Master of Science in Computer Science",
+                institution: "California State University Fullerton",
+                period: "Aug 2024 - June 2026",
+                location: "Fullerton, California"
+              }, {
+                title: "Previous Education",
+                subtitle: "Bachelor of Technology in Information Technology",
+                institution: "Indore Institute of Science and Technology",
+                period: "Sep 2020 - June 2024",
+                location: "Indore, India"
+              }].map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`relative overflow-hidden rounded-[28px] border border-white/10 bg-white/6 p-8 text-white ${softGlowShadow("hover:-translate-y-1 transition-all duration-300")}`}
+                >
+                  <div className="absolute inset-0 opacity-0 transition-opacity duration-500 hover:opacity-100"
+                    style={{ background: "radial-gradient(120% 120% at 20% 0%, rgba(99,102,241,0.22), transparent 55%)" }}
+                  />
+                  <div className="relative flex items-start gap-4">
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/10">
+                      <GraduationCap className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+                      <p className="text-sm font-medium text-white/80">{item.subtitle}</p>
+                      <p className="text-sm text-white/60">{item.institution}</p>
+                      <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.2em] text-white/45">
+                        <span className="inline-flex items-center gap-2">
+                          <Calendar className="h-4 w-4" />
+                          {item.period}
+                        </span>
+                        <span className="inline-flex items-center gap-2">
+                          <MapPin className="h-4 w-4" />
+                          {item.location}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="clean-card p-8 hover-lift">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 border border-[#E5E5E5] flex items-center justify-center">
-                    <GraduationCap className="h-6 w-6 text-[#111111]" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-[#111111] mb-2 font-manrope">Previous Education</h3>
-                    <p className="text-[#525252] font-medium">Bachelor of Technology in Information Technology</p>
-                    <p className="text-[#525252]">Indore Institute of Science and Technology</p>
-                    <div className="flex items-center space-x-4 mt-2 text-sm text-[#525252]">
-                      <span className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        Sep 2020 - June 2024
-                      </span>
-                      <span className="flex items-center">
-                        <MapPin className="h-4 w-4 mr-1" />
-                        Indore, India
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

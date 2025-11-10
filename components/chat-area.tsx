@@ -1,208 +1,166 @@
 "use client"
 
 import { useState } from "react"
-import { Send, Menu } from "lucide-react"
 import { Message } from "./message"
+import { cn } from "@/lib/utils"
 
-interface Chat {
-  id: string
-  title: string
-  timestamp: Date
-}
-
-interface Message {
+interface ChatMessage {
   id: string
   content: string
   isUser: boolean
   timestamp: Date
 }
 
-interface ChatAreaProps {
-  currentChatId: string | null
-  chats: Chat[]
-  setChats: React.Dispatch<React.SetStateAction<Chat[]>>
-  onMenuClick: () => void
+interface Prompt {
+  id: string
+  label: string
+  question: string
+  answer: string
 }
 
-export function ChatArea({ currentChatId, chats, setChats, onMenuClick }: ChatAreaProps) {
-  const [messages, setMessages] = useState<Record<string, Message[]>>({})
-  const [inputValue, setInputValue] = useState("")
-  // Track if the user has started the chat (sent the first message)
-  const [hasStartedChat, setHasStartedChat] = useState(false)
+const PROMPTS: Prompt[] = [
+  {
+    id: "about",
+    label: "Know about me",
+    question: "Can you introduce yourself?",
+    answer: `Absolutely! I'm Mohit Patni, a Machine Learning Research Scholar at California State University, Fullerton where I blend data science with environmental anthropology to build thoughtful AI experiences. I previously completed my B.Tech in Information Technology in India before heading to the US for my master's.
 
-  const currentChat = chats.find(chat => chat.id === currentChatId)
-  const currentMessages = currentChatId ? messages[currentChatId] || [] : []
+Right now I split my time between:
+- Everloom, the AI "second brain" startup I'm building to capture and replay your digital memories with context.
+- ML research with Prof. Sarah G. Grant, where we launched Titan Bird Trails, an AI birding platform powered by 30+ years of eBird data.
+- A data analyst role at CSUF studying how CEO traits influence company outcomes using Python, SQL, and BI tooling.
 
-  const generateAIResponse = async (userInput: string): Promise<string> => {
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userInput }),
-      });
+Across roles I'm focused on turning messy, real-world data into intuitive, human experiences.`
+  },
+  {
+    id: "fit",
+    label: "Why I'm a good fit",
+    question: "Why would you be a great fit for our team?",
+    answer: `Three reasons stand out for me:
+1. Full-stack execution: I design, ship, and iterate fast, whether it's a live AI product (Everloom) or a research-backed web app (Titan Bird Trails).
+2. Applied ML craft: I work end-to-end, from data pipelines to model deployment. Recent projects mix Gemini, TensorFlow, geospatial APIs, and behavioral analytics.
+3. Collaborative energy: I've led cross-functional efforts with researchers, designers, and founders. I love turning ambiguous ideas into tangible results and communicating insights clearly.
 
-      if (!response.ok) {
-        const errorBody = await response.json();
-        console.error("API Error Response:", errorBody.error);
-        throw new Error(`API request failed with status ${response.status}`);
-      }
+If you're building products at the intersection of AI, UX, and data storytelling, I'm already thinking about the roadmap.`
+  },
+  {
+    id: "projects",
+    label: "Signature projects",
+    question: "What projects should I explore?",
+    answer: `Here are the two you'll enjoy exploring first:
+- Titan Bird Trails -> https://birding-csuf.vercel.app/
+  * AI-guided campus birding with species predictions using weather, location, and historical sightings.
+  * Built with React, Tailwind, Gemini API, and Python ML pipelines.
 
-      const data = await response.json();
-      return data.response;
+- AI Fire Prediction System -> https://ignis-ai-frontend.onrender.com/
+  * Full-stack platform predicting wildfire spread using satellite feeds, weather data, and advanced ML models.
+  * Built with React, Express, MongoDB, TensorFlow, and Mapbox visualizations.
 
-    } catch (error) {
-      console.error('Error calling chat API:', error)
-      return "I'm sorry, I'm having trouble connecting right now. I'm Mohit Patni, a Machine Learning Research Scholar and Data Analyst. How can I help you learn more about my work and skills?"
-    }
+Both highlight how I design delightful interfaces around complex models.`
+  },
+  {
+    id: "contact",
+    label: "How to reach me",
+    question: "How can people get in touch with you?",
+    answer: `Here is the simplest way to connect:
+- Email: mohitpatni@csu.fullerton.edu
+- LinkedIn: https://www.linkedin.com/in/mohitpatni1/
+- GitHub: https://github.com/MohitPatni0731
+
+Ping me anytime if you want to jam on ML, product strategy, or new collaborations.`
   }
+]
 
-  const handleSendMessage = async () => {
-    if (!inputValue.trim()) return
+export function ChatArea() {
+  const [messages, setMessages] = useState<ChatMessage[]>([{
+    id: "intro",
+    content: "Hi, I'm Mohit. Choose any quick question below and I'll open up a tailored response right inside this chat.",
+    isUser: false,
+    timestamp: new Date()
+  }])
+  const [answeredPrompts, setAnsweredPrompts] = useState<string[]>([])
 
-    // If no current chat, create one
-    let chatId = currentChatId
-    if (!chatId) {
-      chatId = `chat-${Date.now()}`
-      const newChat = {
-        id: chatId,
-        title: inputValue.slice(0, 30) + (inputValue.length > 30 ? "..." : ""),
-        timestamp: new Date()
-      }
-      setChats(prev => [newChat, ...prev])
-      setHasStartedChat(true)
-      setTimeout(() => {
-        window.location.reload()
-      }, 100)
-      return
-    }
+  const handlePromptClick = (prompt: Prompt) => {
+    if (answeredPrompts.includes(prompt.id)) return
 
-    const userMessage: Message = {
-      id: `msg-${Date.now()}`,
-      content: inputValue,
+    const now = new Date()
+    const userMessage: ChatMessage = {
+      id: `user-${prompt.id}-${now.getTime()}`,
+      content: prompt.question,
       isUser: true,
-      timestamp: new Date()
+      timestamp: now
     }
 
-    // Add user message
-    setMessages(prev => ({
-      ...prev,
-      [chatId]: [...(prev[chatId] || []), userMessage]
-    }))
-
-    // Update chat title if it's the first message
-    if (currentMessages.length === 0) {
-      setChats(prev => prev.map(chat => 
-        chat.id === chatId 
-          ? { ...chat, title: inputValue.slice(0, 30) + (inputValue.length > 30 ? "..." : "") }
-          : chat
-      ))
-    }
-
-    setInputValue("")
-    setHasStartedChat(true)
-
-    // Get AI response using Groq API
-    const aiResponse = await generateAIResponse(userMessage.content)
-    
-    const aiMessage: Message = {
-      id: `msg-${Date.now() + 1}`,
-      content: aiResponse,
+    const responseMessage: ChatMessage = {
+      id: `response-${prompt.id}-${now.getTime()}`,
+      content: prompt.answer,
       isUser: false,
-      timestamp: new Date()
+      timestamp: new Date(now.getTime() + 1)
     }
 
-    setMessages(prev => ({
-      ...prev,
-      [chatId]: [...(prev[chatId] || []), aiMessage]
-    }))
+    setMessages(prev => [...prev, userMessage, responseMessage])
+    setAnsweredPrompts(prev => [...prev, prompt.id])
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage()
-    }
-  }
-
-  // Show centered input if no messages yet
-  if (!hasStartedChat && (!currentChatId || currentMessages.length === 0)) {
-    return (
-      <div className="flex-1 flex items-center justify-center bg-[#212121]">
-        <div className="text-center max-w-4xl mx-auto px-4">
-          <h1 className="text-5xl font-bold text-white mb-8">Hi, I am Mohit</h1>
-          <div className="max-w-3xl mx-auto">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Ask anything"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
-                className="w-full px-6 py-4 bg-[#40414f] text-white placeholder-[#8e8ea0] rounded-lg text-lg focus:outline-none focus:ring-1 focus:ring-[#8e8ea0] border border-[#565869]"
-              />
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <button 
-                  onClick={handleSendMessage}
-                  className="p-2 hover:bg-[#2A2A2A] rounded-md transition-colors"
-                >
-                  <Send size={16} className="text-white" />
-                </button>
-              </div>
-            </div>
-          </div>
-          <p className="text-xs text-[#8e8ea0] mt-8">
-            ML enthusiast by day, AI builder by night. Let's chat about tech, research, or anything that sparks curiosity! 🚀
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  // After first message, show chat layout
   return (
-    <div className="flex-1 flex flex-col bg-[#212121]">
-      {/* Header for mobile */}
-      <div className="md:hidden flex items-center justify-between p-3 border-b border-[#565869]">
-        <button onClick={onMenuClick} className="text-white">
-          <Menu size={24} />
-        </button>
-        <h2 className="text-lg font-semibold text-white truncate">
-          {currentChat?.title || "New Chat"}
+    <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-10">
+      <header className="text-center">
+        <span className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.3em] text-white/60">
+          Portfolio Concierge
+        </span>
+        <h2 className="mt-6 text-balance text-3xl font-semibold text-white md:text-4xl">
+          Ask me anything about my journey and I will respond instantly.
         </h2>
-        {/* Spacer */}
-        <div className="w-6" /> 
-      </div>
-      
-      {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto">
-        {currentMessages.map((message) => (
-          <Message key={message.id} message={message} />
-        ))}
-      </div>
+        <p className="mt-4 text-base text-white/60 md:text-lg">
+          These prompts highlight how I build, collaborate, and communicate. Tap one or stack a few to explore the story.
+        </p>
+      </header>
 
-      {/* Input Area */}
-      <div className="border-t border-[#565869] bg-[#212121]">
-        <div className="max-w-4xl mx-auto p-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Ask anything"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={handleKeyPress}
-              className="w-full px-6 py-4 bg-[#40414f] text-white placeholder-[#8e8ea0] rounded-lg text-lg focus:outline-none focus:ring-1 focus:ring-[#8e8ea0] border border-[#565869]"
-            />
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-              <button 
-                onClick={handleSendMessage}
-                className="p-2 hover:bg-[#2A2A2A] rounded-md transition-colors"
-              >
-                <Send size={16} className="text-white" />
-              </button>
-            </div>
+      <div className="glass-panel relative flex min-h-[540px] flex-col overflow-hidden rounded-[32px] border border-white/10">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/10 via-white/0 to-transparent" />
+
+        <div className="relative flex-1 overflow-y-auto px-5 py-7 sm:px-10 sm:py-10">
+          <div className="space-y-6">
+            {messages.map((message) => (
+              <Message key={message.id} message={message} />
+            ))}
           </div>
+        </div>
+
+        <div className="relative border-t border-white/10 bg-white/5 px-5 py-6 sm:px-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/60">Quick questions</p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            {PROMPTS.map(prompt => {
+              const isAnswered = answeredPrompts.includes(prompt.id)
+              return (
+                <button
+                  key={prompt.id}
+                  onClick={() => handlePromptClick(prompt)}
+                  disabled={isAnswered}
+                  className={cn(
+                    "group relative overflow-hidden rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(139,92,246,0.45)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+                    isAnswered
+                      ? "cursor-default border-white/15 bg-white/10 text-white/45"
+                      : "border-white/15 bg-white/10 text-white hover:scale-[1.03] hover:border-white/25 hover:text-white"
+                  )}
+                >
+                  {!isAnswered && (
+                    <span
+                      className="absolute inset-0 -z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      style={{
+                        background:
+                          "linear-gradient(120deg, rgba(139,92,246,0.35) 0%, rgba(56,189,248,0.25) 50%, rgba(255,255,255,0.12) 100%)"
+                      }}
+                    />
+                  )}
+                  {prompt.label}
+                </button>
+              )
+            })}
+          </div>
+          <p className="mt-4 text-xs text-white/60">
+            Each bubble expands the conversation right above, perfect for sharing with recruiters or collaborators.
+          </p>
         </div>
       </div>
     </div>

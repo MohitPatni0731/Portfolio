@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { ExternalLink, Github, TrendingUp, Bell, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { cn, softGlowShadow } from "@/lib/utils"
 
 const projects = [
   {
@@ -23,12 +24,12 @@ const projects = [
   {
     title: "Python Virtual Lab",
     description:
-      "A collaborative project with the Government of India - a web-based Python compiler and learning platform.",
+      "A collaborative project with the Government of India: a web-based Python compiler and learning platform.",
     features: [
       "Web-based Python compiler using Pyodide",
-      "Reduced loading size from 50MB to 15MB",
-      "2-second improvement in page loading time",
-      "25% increase in user engagement",
+      "Reduced loading size from 50 MB to 15 MB",
+      "Two second improvement in page loading time",
+      "Twenty five percent increase in user engagement",
     ],
     technologies: ["JavaScript", "Pyodide", "Web Assembly", "Python", "Performance Optimization"],
     icon: Zap,
@@ -43,7 +44,7 @@ const projects = [
       "5G network simulation using Open5GS",
       "gNodeB and UERANSIM integration for testing",
       "Network packet analysis with Wireshark",
-      "30% improvement in network security",
+      "Thirty percent improvement in network security",
     ],
     technologies: ["Open5GS", "UERANSIM", "Wireshark", "Network Security", "5G Technology"],
     icon: Bell,
@@ -74,74 +75,104 @@ export function Projects() {
   }, [])
 
   return (
-    <section id="projects" ref={sectionRef} className="py-24 gradient-bg">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`scroll-reveal ${isVisible ? "revealed" : ""}`}>
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mb-6 font-manrope">Projects</h2>
-            <div className="w-16 h-0.5 bg-[#111111] mx-auto" />
+    <section id="projects" ref={sectionRef} className="relative overflow-hidden py-[var(--section-padding)]">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/4 top-[-10%] h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
+        <div className="absolute right-[-10%] top-1/3 h-96 w-96 rounded-full bg-secondary/20 blur-[140px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(148,187,255,0.12),_transparent_45%)]" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className={cn("scroll-reveal", isVisible && "revealed")}
+        >
+          <div className="mx-auto mb-16 max-w-3xl text-center">
+            <span className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.3em] text-white/60">
+              Featured Projects
+            </span>
+            <h2 className="mt-6 text-3xl font-semibold text-white md:text-5xl">Where research meets shippable product</h2>
+            <p className="mt-4 text-base text-white/60 md:text-lg">
+              Explorations that blend applied machine learning, thoughtful UX, and real-world impact.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project, index) => (
-              <div
+              <article
                 key={index}
-                className="clean-card p-8 hover-lift group"
+                className={cn(
+                  "group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/6 p-8 text-white backdrop-blur transition-all duration-500 hover:-translate-y-3 hover:border-white/25 hover:shadow-[0_34px_80px_rgba(4,7,17,0.6)]",
+                  softGlowShadow()
+                )}
                 style={{ animationDelay: `${index * 150}ms` }}
               >
-                <div className="w-12 h-12 border border-[#E5E5E5] flex items-center justify-center mb-6 group-hover:border-[#111111] transition-colors duration-300">
-                  <project.icon className="h-6 w-6 text-[#111111]" />
-                </div>
+                <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "radial-gradient(120% 120% at 20% 0%, rgba(99,102,241,0.25), transparent 55%), radial-gradient(140% 140% at 80% 20%, rgba(45,212,191,0.25), transparent 60%)"
+                  }}
+                />
+                <div className="relative flex h-full flex-col">
+                  <div className="flex items-start justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-white shadow-inner">
+                      <project.icon className="h-6 w-6" />
+                    </div>
+                    <span className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">0{index + 1}</span>
+                  </div>
 
-                <h3 className="text-2xl font-bold text-[#111111] mb-4 font-manrope">{project.title}</h3>
-                <p className="text-[#525252] mb-6 leading-relaxed">{project.description}</p>
+                  <h3 className="mt-6 text-2xl font-semibold text-white">{project.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/70">{project.description}</p>
 
-                <div className="mb-6">
-                  <h4 className="text-sm font-medium text-[#111111] mb-3 uppercase tracking-wide">Key Features</h4>
-                  <ul className="space-y-2">
-                    {project.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start">
-                        <div className="w-1.5 h-1.5 bg-[#111111] rounded-full mt-2 mr-3 flex-shrink-0" />
-                        <span className="text-sm text-[#525252]">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  <div className="mt-6 space-y-3">
+                    <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-white/60">Highlights</h4>
+                    <ul className="space-y-2 text-sm text-white/70">
+                      {project.features.map((feature, featureIndex) => (
+                        <li key={featureIndex} className="flex items-start gap-3">
+                          <span className="mt-1 inline-flex h-1.5 w-1.5 rounded-full bg-white/60" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                <div className="mb-6">
-                  <h4 className="text-sm font-medium text-[#111111] mb-3 uppercase tracking-wide">Technologies</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech, techIndex) => (
-                      <span
-                        key={techIndex}
-                        className="px-3 py-1 bg-[#F5F5F5] text-xs text-[#525252] border border-[#E5E5E5] rounded-sm"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                  <div className="mt-6 space-y-3">
+                    <h4 className="text-xs font-semibold uppercase tracking-[0.25em] text-white/60">Stack</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {project.technologies.map((tech, techIndex) => (
+                        <span
+                          key={techIndex}
+                          className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs text-white/70"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 rounded-full border-white/25 bg-white/5 text-white transition hover:border-white/40 hover:bg-white/15"
+                      asChild
+                    >
+                      <a href={project.github} target="_blank" rel="noreferrer">
+                        <Github className="mr-2 h-4 w-4" />
+                        Code
+                      </a>
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="flex-1 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-sky-500 text-white shadow-[0_12px_35px_rgba(88,82,197,0.45)] transition hover:scale-[1.02]"
+                      asChild
+                    >
+                      <a href={project.demo} target="_blank" rel="noreferrer">
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Demo
+                      </a>
+                    </Button>
                   </div>
                 </div>
-
-                <div className="flex space-x-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white"
-                    asChild
-                  >
-                    <a href={project.github} target="_blank" rel="noreferrer">
-                      <Github className="h-4 w-4 mr-2" />
-                      Code
-                    </a>
-                  </Button>
-                  <Button size="sm" className="flex-1 bg-[#111111] text-white hover:bg-[#111111]/90" asChild>
-                    <a href={project.demo} target="_blank" rel="noreferrer">
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Demo
-                    </a>
-                  </Button>
-                </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>

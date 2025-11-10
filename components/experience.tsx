@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Calendar, MapPin, ExternalLink } from "lucide-react"
+import { cn, softGlowShadow } from "@/lib/utils"
 
 const experiences = [
   {
@@ -23,7 +24,7 @@ const experiences = [
     period: "Jan 2025 - Present",
     description: [
       "Analyzing datasets using Python to uncover patterns in CEO characteristics, compensation, and firm performance.",
-      "Building interactive dashboards with Power BI & Tableau to visualize insights on leadership trends & business outcomes.",
+      "Building interactive dashboards with Power BI and Tableau to visualize insights on leadership trends and business outcomes.",
       "Collaborating with Dr. Weng to define research goals, automate data collection from public filings and databases, and apply statistical analysis to support academic publications.",
     ],
   },
@@ -37,7 +38,7 @@ const experiences = [
     description: [
       "Analyzed and identified vulnerabilities in the infrastructure of the 5G network.",
       "Utilized Open5GS tool to simulate a 5G network, connecting gNodeB with UERANSIM for testing.",
-      "Used Wireshark to perform file transfer tests and network packet analysis, identifying and mitigating security holes, resulting in a 30% increase in network security.",
+      "Used Wireshark to perform file transfer tests and network packet analysis, identifying and mitigating security holes, resulting in a thirty percent increase in network security.",
     ],
   },
   {
@@ -48,9 +49,9 @@ const experiences = [
     supervisor: "Prof. Karthik Vaidyanathan",
     supervisorUrl: "https://karthikvaidhyanathan.com/",
     description: [
-      'Collaborated on the "Python Virtual Lab" project, a joint initiative with the Government of India.',
-      "Created a web-based Python compiler with Pyodide, reducing the loading size from 50 Mb to 15 Mb by removing unnecessary dependencies, which sped up page loading time by 2 seconds.",
-      "Implemented features leading to a 25% increase in user engagement and 15% faster execution times.",
+      "Collaborated on the \"Python Virtual Lab\" project, a joint initiative with the Government of India.",
+      "Created a web-based Python compiler with Pyodide, reducing the loading size from 50 MB to 15 MB by removing unnecessary dependencies, which sped up page loading time by two seconds.",
+      "Implemented features leading to a twenty five percent increase in user engagement and fifteen percent faster execution times.",
     ],
   },
   {
@@ -61,8 +62,8 @@ const experiences = [
     supervisor: "Prof. Ayan Mondal",
     supervisorUrl: "https://people.iiti.ac.in/~ayanm/",
     description: [
-      "Conducted extensive literature surveys in emerging fields like Internet of Things (IoT), Software-defined networks, 6G networks, federated learning algorithms, and edge computing.",
-      'Learnings during my internship were reported back to my university as an internship report and later compiled in a survey article titled "How Software-Defined Networks can reduce the latency of 6G Networks."',
+      "Conducted extensive literature surveys in emerging fields like Internet of Things, software-defined networks, sixth generation networks, federated learning algorithms, and edge computing.",
+      "Learnings during my internship were reported back to my university as an internship report and later compiled in a survey article titled \"How Software-Defined Networks can reduce the latency of 6G Networks.\"",
     ],
   },
 ]
@@ -89,60 +90,84 @@ export function Experience() {
   }, [])
 
   return (
-    <section id="experience" ref={sectionRef} className="py-24 gradient-bg">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`scroll-reveal ${isVisible ? "revealed" : ""}`}>
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mb-6 font-manrope">Experience</h2>
-            <div className="w-16 h-0.5 bg-[#111111] mx-auto" />
+    <section id="experience" ref={sectionRef} className="relative overflow-hidden py-[var(--section-padding)]">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-[-10%] top-[15%] h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
+        <div className="absolute right-[-5%] bottom-[10%] h-80 w-80 rounded-full bg-secondary/20 blur-[140px]" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-6 sm:px-8 lg:px-12">
+        <div className={cn("scroll-reveal", isVisible && "revealed")}
+        >
+          <div className="mx-auto mb-16 max-w-3xl text-center">
+            <span className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.3em] text-white/60">
+              Experience
+            </span>
+            <h2 className="mt-6 text-3xl font-semibold text-white md:text-5xl">Building teams, products, and research outcomes</h2>
+            <p className="mt-4 text-base text-white/60 md:text-lg">
+              A snapshot of collaborations where I took ideas from exploration to measurable impact.
+            </p>
           </div>
 
           <div className="space-y-8">
             {experiences.map((exp, index) => (
-              <div
+              <article
                 key={index}
-                className={`clean-card p-8 hover-lift ${isVisible ? "fade-in-up" : "opacity-0"}`}
-                style={{ animationDelay: `${index * 200}ms` }}
+                className={cn(
+                  "group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/6 p-8 text-white transition-all duration-500 hover:-translate-y-2 hover:border-white/25 hover:shadow-[0_32px_80px_rgba(4,7,17,0.6)]",
+                  softGlowShadow(),
+                  isVisible ? "fade-in-up" : "opacity-0"
+                )}
+                style={{ animationDelay: `${index * 160}ms` }}
               >
-                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-[#111111] mb-2 font-manrope">{exp.title}</h3>
-                    <div className="flex items-center space-x-4 text-[#525252] mb-2">
-                      <span className="font-medium">{exp.company}</span>
-                      {exp.supervisor && (
-                        <a
-                          href={exp.supervisorUrl}
-                          target="_blank"
-                          className="flex items-center hover:text-[#111111] transition-colors duration-300"
-                          rel="noreferrer"
-                        >
-                          {exp.supervisor}
-                          <ExternalLink className="h-3 w-3 ml-1" />
-                        </a>
-                      )}
+                <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "radial-gradient(120% 120% at 10% 0%, rgba(99,102,241,0.22), transparent 55%), radial-gradient(160% 120% at 80% 40%, rgba(45,212,191,0.22), transparent 60%)"
+                  }}
+                />
+                <div className="relative flex flex-col gap-6">
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="space-y-3">
+                      <h3 className="text-2xl font-semibold text-white">{exp.title}</h3>
+                      <div className="flex flex-wrap items-center gap-3 text-sm text-white/65">
+                        <span className="font-medium text-white/80">{exp.company}</span>
+                        {exp.supervisor && (
+                          <a
+                            href={exp.supervisorUrl}
+                            target="_blank"
+                            className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1 transition hover:border-white/25 hover:bg-white/15"
+                            rel="noreferrer"
+                          >
+                            {exp.supervisor}
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.2em] text-white/50">
+                        <span className="inline-flex items-center gap-2">
+                          <MapPin className="h-4 w-4" />
+                          {exp.location}
+                        </span>
+                        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+                          <Calendar className="h-4 w-4" />
+                          {exp.period}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 text-sm text-[#525252]">
-                      <span className="flex items-center">
-                        <MapPin className="h-4 w-4 mr-1" />
-                        {exp.location}
-                      </span>
-                      <span className="flex items-center px-3 py-1 bg-[#F5F5F5] rounded-full">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        {exp.period}
-                      </span>
-                    </div>
+                    <span className="text-xs font-semibold uppercase tracking-[0.3em] text-white/45">0{index + 1}</span>
                   </div>
-                </div>
 
-                <ul className="space-y-3">
-                  {exp.description.map((item, itemIndex) => (
-                    <li key={itemIndex} className="flex items-start">
-                      <div className="w-2 h-2 bg-[#111111] rounded-full mt-2 mr-4 flex-shrink-0" />
-                      <span className="text-[#525252] leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                  <ul className="space-y-3 text-sm text-white/70">
+                    {exp.description.map((item, itemIndex) => (
+                      <li key={itemIndex} className="flex items-start gap-3">
+                        <span className="mt-2 inline-flex h-1.5 w-1.5 rounded-full bg-white/60" />
+                        <span className="leading-relaxed">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
             ))}
           </div>
         </div>

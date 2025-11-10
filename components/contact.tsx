@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Mail, Phone, MapPin, Linkedin, Github } from "lucide-react"
+import { gradientText, softGlowShadow } from "@/lib/utils"
 
 export function Contact() {
   const [isVisible, setIsVisible] = useState(false)
@@ -24,77 +25,98 @@ export function Contact() {
     return () => observer.disconnect()
   }, [])
 
+  const contactMethods = [
+    {
+      icon: Mail,
+      title: "Email",
+      value: "mohitpatni@csu.fullerton.edu",
+      href: "mailto:mohitpatni@csu.fullerton.edu",
+    },
+    {
+      icon: Phone,
+      title: "Phone",
+      value: "+1 (657) 751-9138",
+      href: "tel:+16577519138",
+    },
+    {
+      icon: MapPin,
+      title: "Location",
+      value: "Fullerton, California, USA",
+    },
+  ]
+
+  const socials = [
+    { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/mohitpatni1/" },
+    { icon: Github, label: "GitHub", href: "https://github.com/MohitPatni0731" },
+  ]
+
   return (
-    <section id="contact" ref={sectionRef} className="py-24 bg-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      id="contact"
+      ref={sectionRef}
+      className="relative overflow-hidden py-[var(--section-padding)]"
+    >
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-[10%] top-[20%] h-96 w-96 rounded-full bg-secondary/25 blur-[160px]" />
+        <div className="absolute right-[-10%] bottom-[15%] h-80 w-80 rounded-full bg-primary/25 blur-[140px]" />
+      </div>
+
+      <div className="relative mx-auto max-w-5xl px-6 sm:px-8 lg:px-12">
         <div className={`scroll-reveal ${isVisible ? "revealed" : ""}`}>
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111111] mb-6 font-manrope">
-              Get In Touch
-            </h2>
-            <div className="w-16 h-0.5 bg-[#111111] mx-auto mb-6" />
-            <p className="text-xl text-[#525252] max-w-2xl mx-auto">
-              Let's discuss opportunities in machine learning research, data analysis, or innovative tech projects.
+          <div className="text-center">
+            <span className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.3em] text-white/60">
+              Contact
+            </span>
+            <h2 className={gradientText("mt-6 text-3xl font-semibold md:text-5xl")}>Let's work on your next intelligent product</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base text-white/65 md:text-lg">
+              Reach out for collaborations, speaking, or just to swap notes on human-centered machine learning.
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
-              <div className="clean-card p-8 hover-lift text-center">
-                <div className="w-12 h-12 border border-[#E5E5E5] flex items-center justify-center mx-auto mb-4">
-                  <Mail className="h-6 w-6 text-[#111111]" />
-                </div>
-                <h3 className="text-xl font-bold text-[#111111] mb-2 font-manrope">Email</h3>
-                <a
-                  href="mailto:mohitpatni@csu.fullerton.edu"
-                  className="text-[#525252] hover:text-[#111111] transition-colors duration-300"
-                >
-                  mohitpatni@csu.fullerton.edu
-                </a>
-              </div>
-
-              <div className="clean-card p-8 hover-lift text-center">
-                <div className="w-12 h-12 border border-[#E5E5E5] flex items-center justify-center mx-auto mb-4">
-                  <Phone className="h-6 w-6 text-[#111111]" />
-                </div>
-                <h3 className="text-xl font-bold text-[#111111] mb-2 font-manrope">Phone</h3>
-                <a
-                  href="tel:+16577519138"
-                  className="text-[#525252] hover:text-[#111111] transition-colors duration-300"
-                >
-                  +1 (657) 751-9138
-                </a>
-              </div>
-
-              <div className="clean-card p-8 hover-lift text-center">
-                <div className="w-12 h-12 border border-[#E5E5E5] flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="h-6 w-6 text-[#111111]" />
-                </div>
-                <h3 className="text-xl font-bold text-[#111111] mb-2 font-manrope">Location</h3>
-                <p className="text-[#525252]">Fullerton, California, USA</p>
-              </div>
-            </div>
-
-            <div className="flex justify-center space-x-6">
-              <a
-                href="https://www.linkedin.com/in/mohitpatni1/"
-                target="_blank"
-                className="clean-card p-6 hover-lift flex items-center space-x-3 hover:border-[#111111] group"
-                rel="noreferrer"
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {contactMethods.map((item, index) => (
+              <div
+                key={index}
+                className={`relative overflow-hidden rounded-[28px] border border-white/10 bg-white/6 p-8 text-center text-white ${softGlowShadow(
+                  "hover:-translate-y-1 transition-all duration-300"
+                )}`}
               >
-                <Linkedin className="h-5 w-5 text-[#111111]" />
-                <span className="text-[#111111] font-medium">LinkedIn</span>
-              </a>
+                <div className="absolute inset-0 opacity-0 transition-opacity duration-500 hover:opacity-100"
+                  style={{ background: "radial-gradient(130% 120% at 15% 0%, rgba(99,102,241,0.18), transparent 55%)" }}
+                />
+                <div className="relative space-y-3">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-white">
+                    <item.icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      className="block text-sm text-white/70 transition hover:text-white"
+                    >
+                      {item.value}
+                    </a>
+                  ) : (
+                    <p className="text-sm text-white/70">{item.value}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            {socials.map((item, index) => (
               <a
-                href="https://github.com/MohitPatni0731"
+                key={index}
+                href={item.href}
                 target="_blank"
-                className="clean-card p-6 hover-lift flex items-center space-x-3 hover:border-[#111111] group"
                 rel="noreferrer"
+                className={`inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-white/70 transition hover:border-white/30 hover:text-white ${softGlowShadow()}`}
               >
-                <Github className="h-5 w-5 text-[#111111]" />
-                <span className="text-[#111111] font-medium">GitHub</span>
+                <item.icon className="h-4 w-4" />
+                {item.label}
               </a>
-            </div>
+            ))}
           </div>
         </div>
       </div>
